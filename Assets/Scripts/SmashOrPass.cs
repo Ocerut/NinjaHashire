@@ -58,10 +58,7 @@ public class SmashOrPass : MonoBehaviour
 
                 /*Emite o evento da onde foi solto*/
 
-                SwipeDecision decision =
-                transform.position.x > 0f ? SwipeDecision.Accept
-                    : transform.position.x < 0f ? SwipeDecision.Reject
-                    : SwipeDecision.None;
+                SwipeDecision decision
 
                 OnSwipeReleased?.Invoke(decision); // avisa o Manager
 

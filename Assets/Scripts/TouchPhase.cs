@@ -34,7 +34,7 @@ public class TouchPhase : MonoBehaviour
                     break;
                 case UnityEngine.TouchPhase.Stationary:
                     Debug.Log("Touch: stationary in direction " + direction);
-                    //message = "stationary";
+                    message = "stationary";
                     break;
             }
         }

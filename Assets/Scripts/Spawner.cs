@@ -41,7 +41,7 @@ public class Spawner : MonoBehaviour
         var point = spawnPoints[Random.Range(0, spawnPoints.Length)];
         var go = Instantiate(prefab, point.position, Quaternion.identity);
         var move = go.GetComponent<SimpleMove2D>();
-        if (move != null)
+        if (move == null)
         {
             move = go.AddComponent<SimpleMove2D>();
             move.destiny = endPosition;
