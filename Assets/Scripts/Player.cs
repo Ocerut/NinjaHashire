@@ -13,20 +13,13 @@ public class Player : MonoBehaviour
     public int index = 0;
     public AudioSource audioSource;
     public AudioClip[] clips;
-    [SerializeField] private float speed;
-    [SerializeField] private float jump;
-    private bool ground = false;
     [SerializeField] private float lowRange;
     [SerializeField] private int sceneNo;
-    private string nextScene;
     [SerializeField] private float score;
     [SerializeField] private int goal;
     [SerializeField] private TextMeshProUGUI scoreText;
     private Rigidbody2D rb2d;
-    [SerializeField] private GameObject porta;
-    private int pulos;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -43,11 +36,6 @@ public class Player : MonoBehaviour
         if (transform.position.y < lowRange)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-        if (score >= goal && porta.activeSelf == false)
-        {
-           porta.SetActive(true);
         }
 
         if (Input.touchCount > 0)

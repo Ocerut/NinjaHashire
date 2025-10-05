@@ -56,11 +56,7 @@ public class SmashOrPass : MonoBehaviour
             if (touch.fingerId == activeFingerID && (touch.phase == UnityEngine.TouchPhase.Ended || touch.phase == UnityEngine.TouchPhase.Canceled))
             {
 
-                /*Emite o evento da onde foi solto*/
-
-                SwipeDecision decision
-
-                OnSwipeReleased?.Invoke(decision); // avisa o Manager
+                
 
                 activeFingerID = -1;
             }
