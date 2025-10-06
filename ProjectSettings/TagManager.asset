@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Shuriken
+  - Slash
+  - Enemy
+  - Dummy
   layers:
   - Default
   - TransparentFX

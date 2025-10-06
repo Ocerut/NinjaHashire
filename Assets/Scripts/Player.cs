@@ -6,37 +6,44 @@ using UnityEngine.SocialPlatforms.Impl;
 using TMPro;
 using System;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem.Interactions;
 
 public class Player : MonoBehaviour
 {
     public GameObject shuriken;
+    public GameObject slash;
     public int index = 0;
     public AudioSource audioSource;
-    public AudioClip[] clips;
-    [SerializeField] private float lowRange;
+    public AudioSource audioSteps;
     [SerializeField] private int sceneNo;
-    [SerializeField] private float score;
+    [SerializeField] private float time;
     [SerializeField] private int goal;
-    [SerializeField] private TextMeshProUGUI scoreText;
-    private Rigidbody2D rb2d;
+    [SerializeField] private TextMeshProUGUI timerText;
+    public AudioClip clipShuriken;
+    public AudioClip clipSword;
+    public float lastTapTime = 0;
+    public float DoubleTapThreshold = 0.3f;
+    private Vector3 hand;
+    public float handAdjust;
+    private Vector3 startPos; 
+    private Vector3 lastPos;   
+    private float dragDistance;
 
     void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
+        audioSteps.Play();
+        dragDistance = Screen.height * 10 / 100;
+        hand = new Vector3(transform.position.x +handAdjust, transform.position.y -handAdjust, transform.position.z);
         if (sceneNo == 1)
         {
-            goal = 60;
-            score = 0;
-            scoreText.text = score.ToString();
+            goal = 90;
         }
     }
 
     void Update()
     {
-        if (transform.position.y < lowRange)
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        time = time + Time.deltaTime;
+        timerText.text = time.ToString("0") + "s";
 
         if (Input.touchCount > 0)
         {
@@ -44,30 +51,29 @@ public class Player : MonoBehaviour
 
             if (touch.phase == UnityEngine.TouchPhase.Began)
             {
-                Vector2 position = Camera.main.ScreenToWorldPoint(touch.position);
-
-                Collider2D hit = Physics2D.OverlapPoint(position);
-
-                if (hit != null)
+                startPos = touch.position;
+                lastPos = touch.position;
+            }
+            else if (touch.phase == UnityEngine.TouchPhase.Moved)
+            {
+                lastPos = touch.position;
+            }
+            else if (touch.phase == UnityEngine.TouchPhase.Ended)
+            {
+                lastPos = touch.position;
+                if (lastPos.x - startPos.x > dragDistance || lastPos.y - startPos.y > dragDistance)
                 {
-                    if (clips != null)
-                    {
-                        audioSource.PlayOneShot(clips[index]);
-                    }
-
-                    
+                    Instantiate(slash, hand, Quaternion.identity);
+                    audioSource.PlayOneShot(clipSword);
                 }
-
-                Instantiate(shuriken, transform.position, Quaternion.identity);
+                else
+                {
+                    Instantiate(shuriken, hand, Quaternion.identity);
+                    audioSource.PlayOneShot(clipShuriken);
+                }
             }
         }
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {  
-        if (collision.gameObject.tag == "Inimigo")
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        if (time >= goal) { SceneManager.LoadScene(3); }
     }
 }
